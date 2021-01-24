@@ -21,6 +21,24 @@ export interface Beer {
 }
 
 export const handlers = [
+	graphql.query("GetOneBeer", (req, res, ctx) => {
+		const { id } = req.variables
+		const beer = beers.filter((beer) => beer.id === id)[0]
+		if (!beer) {
+			return res(
+				ctx.errors([
+					{
+						message: "Page not found!",
+					},
+				])
+			)
+		}
+		return res(
+			ctx.data({
+				beer,
+			})
+		)
+	}),
 	graphql.query("GetBeers", (req, res, ctx) => {
 		const { nameFilter, styleFilter } = req.variables
 		const beerList = beers.filter(
