@@ -4,6 +4,7 @@ import Head from "next/head"
 import styled from "@emotion/styled"
 
 import BeerList from "../components/BeerList"
+import Cart from "../components/Cart"
 
 const Home = () => {
 	// const [login] = useMutation(LOGIN, { refetchQueries: ["GetUserInfo"] })
@@ -55,7 +56,7 @@ const Home = () => {
 				</form>
 				<BeerList nameFilter={searchTerm} styleFilter={styleFilter} />
 			</Main>
-
+			<Cart />
 			<footer>
 				<a
 					href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
