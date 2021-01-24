@@ -1,6 +1,7 @@
-import { gql, useQuery } from "@apollo/client"
-import styled from "@emotion/styled"
 import React, { FC } from "react"
+import { gql, useQuery } from "@apollo/client"
+import Link from "next/link"
+import styled from "@emotion/styled"
 import {
 	CartActionType,
 	useCartDispatch,
@@ -36,7 +37,7 @@ const BeerList: FC<Props> = ({ nameFilter, styleFilter }) => {
 			variables: { nameFilter, styleFilter },
 		}
 	)
-	const { count, beers } = { ...data }
+	const { count, beers } = data ?? {}
 	const dispatch = useCartDispatch()
 	const { cart } = useCartState()
 	const handleAddToCart = (id: number) => {
@@ -46,6 +47,14 @@ const BeerList: FC<Props> = ({ nameFilter, styleFilter }) => {
 	const isInCart = (id: number): boolean => {
 		return cart.find((item) => item.id === id)
 	}
+
+	const toKebabCase = (string: string) =>
+		string
+			.match(
+				/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
+			)
+			.map((x) => x.toLowerCase())
+			.join("-")
 
 	return (
 		<div>
@@ -65,7 +74,14 @@ const BeerList: FC<Props> = ({ nameFilter, styleFilter }) => {
 										alt={`${name} label`}
 									/>
 									<ItemBody>
-										<ItemTitle>{name}</ItemTitle>
+										<ItemTitle>
+											<Link
+												href={`/${id}`}
+												// as={`/${toKebabCase(name)}`}
+											>
+												<a>{name}</a>
+											</Link>
+										</ItemTitle>
 										<ItemDetails>
 											<small>Style: {style}</small>
 											<small>ABV: {abv}</small>
