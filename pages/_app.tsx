@@ -1,4 +1,5 @@
 import { ApolloProvider } from "@apollo/client"
+import { CartProvider } from "../context/CartContext"
 import { useApollo } from "../lib/apolloClient"
 import "../styles/globals.css"
 require("../mocks")
@@ -8,7 +9,9 @@ const App = ({ Component, pageProps }) => {
 
 	return (
 		<ApolloProvider client={apolloClient}>
-			<Component {...pageProps} />
+			<CartProvider>
+				<Component {...pageProps} />
+			</CartProvider>
 		</ApolloProvider>
 	)
 }
