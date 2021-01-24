@@ -1,15 +1,21 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { initializeApollo } from "../lib/apolloClient"
 import Head from "next/head"
 import styled from "@emotion/styled"
 
 import BeerList from "../components/BeerList"
 import Cart from "../components/Cart"
+import { CartActionType, useCartDispatch } from "../context/CartContext"
 
 const Home = () => {
 	// const [login] = useMutation(LOGIN, { refetchQueries: ["GetUserInfo"] })
 	const [searchTerm, setSearchTerm] = useState("")
 	const [styleFilter, setStyleFilter] = useState("all")
+	const dispatch = useCartDispatch()
+
+	useEffect(() => {
+		dispatch({ type: CartActionType.hydrateCart })
+	}, [])
 
 	let input: HTMLInputElement
 	let select: HTMLSelectElement

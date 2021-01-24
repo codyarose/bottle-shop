@@ -5,40 +5,42 @@ interface CartState {
 }
 type CartDispatch = Dispatch<{
 	type: CartActionType
-	payload: {
+	payload?: {
 		id: number
 	}
 }>
 
 export enum CartActionType {
-	addItem = "addItem",
-	removeItem = "removeItem",
+	addItem,
+	removeItem,
+	hydrateCart,
 }
-
 const CartStateContext = createContext<CartState | undefined>(undefined)
 const CartDispatchContext = createContext<CartDispatch | undefined>(undefined)
 
 const cartReducer = (
 	state: CartState,
-	action: { type: CartActionType; payload: { id: number } }
+	action: { type: CartActionType; payload?: { id: number } }
 ) => {
 	switch (action.type) {
+		case CartActionType.hydrateCart: {
+			const storedCart = window.localStorage.getItem("cart")
+			return { cart: JSON.parse(storedCart) }
+		}
 		case CartActionType.addItem: {
 			if (state.cart.find((item) => item.id === action.payload.id)) {
 				return { cart: state.cart }
 			}
 
 			const newCart = [...state.cart, action.payload]
+			window.localStorage.setItem("cart", JSON.stringify(newCart))
 			return { cart: newCart }
 		}
 		case CartActionType.removeItem: {
-			// const newCart = [...state.cart].splice(
-			// 	state.cart.findIndex((a) => a.id === action.payload.id),
-			// 	1
-			// )
 			const newCart = state.cart.filter(
 				(item) => item.id !== action.payload.id
 			)
+			window.localStorage.setItem("cart", JSON.stringify(newCart))
 			return { cart: newCart }
 		}
 		default:
