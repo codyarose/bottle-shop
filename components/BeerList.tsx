@@ -1,6 +1,11 @@
 import { gql, useQuery } from "@apollo/client"
 import styled from "@emotion/styled"
 import React, { FC } from "react"
+import {
+	CartActionType,
+	useCartDispatch,
+	useCartState,
+} from "../context/CartContext"
 import { Beer } from "../mocks/handlers"
 
 interface Props {
@@ -21,6 +26,8 @@ export const GET_BEERS = gql`
 		}
 	}
 `
+const imageFallback =
+	"https://untappd.akamaized.net/site/assets/images/temp/badge-beer-default.png"
 
 const BeerList: FC<Props> = ({ nameFilter, styleFilter }) => {
 	const { loading, error, data } = useQuery<{ beers: Beer[]; count: number }>(
@@ -30,8 +37,15 @@ const BeerList: FC<Props> = ({ nameFilter, styleFilter }) => {
 		}
 	)
 	const { count, beers } = { ...data }
-	const imageFallback =
-		"https://untappd.akamaized.net/site/assets/images/temp/badge-beer-default.png"
+	const dispatch = useCartDispatch()
+	const { cart } = useCartState()
+	const handleAddToCart = (id: number) => {
+		dispatch({ type: CartActionType.addItem, payload: { id } })
+	}
+
+	const isInCart = (id: number): boolean => {
+		return cart.find((item) => item.id === id)
+	}
 
 	return (
 		<div>
@@ -57,7 +71,14 @@ const BeerList: FC<Props> = ({ nameFilter, styleFilter }) => {
 											<small>ABV: {abv}</small>
 										</ItemDetails>
 										<ItemPrice>${price}</ItemPrice>
-										<button>add to cart</button>
+										<button
+											onClick={() => handleAddToCart(id)}
+											disabled={isInCart(id)}
+										>
+											{isInCart(id)
+												? "added to cart"
+												: "add to cart"}
+										</button>
 									</ItemBody>
 								</Item>
 							)
