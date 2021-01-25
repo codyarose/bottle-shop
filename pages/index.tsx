@@ -5,7 +5,6 @@ import Head from "next/head"
 import BeerList from "../components/BeerList"
 
 const Home = () => {
-	// const [login] = useMutation(LOGIN, { refetchQueries: ["GetUserInfo"] })
 	const [searchTerm, setSearchTerm] = useState("")
 	const [styleFilter, setStyleFilter] = useState("all")
 
@@ -52,14 +51,6 @@ const Home = () => {
 		</>
 	)
 }
-
-// const LOGIN = gql`
-// 	mutation Login($username: String!) {
-// 		login(username: $username) {
-// 			username
-// 		}
-// 	}
-// `
 
 export async function getStaticProps() {
 	const apolloClient = initializeApollo()
