@@ -1,8 +1,8 @@
 import React, { FC } from "react"
 import { gql, useQuery } from "@apollo/client"
 import styled from "@emotion/styled"
-import { Beer } from "../mocks/handlers"
 import BeerInfo from "./BeerInfo"
+import { Beer } from "../types"
 
 interface Props {
 	nameFilter: string
@@ -35,11 +35,13 @@ const BeerList: FC<Props> = ({ nameFilter, styleFilter }) => {
 			{!loading && data && (
 				<>
 					<List>
-						{beers.map((beer: Beer) => (
-							<li key={beer.id}>
-								<BeerInfo beer={beer} layout='card' />
-							</li>
-						))}
+						{beers
+							? beers.map((beer: Beer) => (
+									<li key={beer.id}>
+										<BeerInfo beer={beer} layout='card' />
+									</li>
+							  ))
+							: null}
 					</List>
 				</>
 			)}

@@ -6,10 +6,9 @@ import {
 	useCartState,
 } from "../context/CartContext"
 import { gql, useQuery } from "@apollo/client"
-import { Beer } from "../mocks/handlers"
-import { buttonStyles } from "./BeerInfo"
 import Link from "next/link"
-// import { ReactComponent as TrashIcon } from "./trashIcon.svg"
+import { buttonStyles } from "../styles/utils"
+import { Beer } from "../types"
 
 export const GET_BEERS_BY_IDS = gql`
 	query GetBeersByIds($ids: [Int]) {
@@ -25,7 +24,7 @@ const Cart = () => {
 	const dispatch = useCartDispatch()
 	const { cart } = useCartState()
 
-	const cartIds = cart.reduce((acc, curr) => {
+	const cartIds = cart.reduce((acc: number[], curr) => {
 		return [...acc, curr.id]
 	}, [])
 
@@ -41,21 +40,21 @@ const Cart = () => {
 	}, [])
 
 	const handleRemove = (id: number) => {
-		dispatch({ type: CartActionType.removeItem, payload: { id } })
+		dispatch({ type: CartActionType.removeItem, payload: { id, qty: 0 } })
 	}
 	const handleDecrement = (id: number) => {
-		dispatch({ type: CartActionType.decrement, payload: { id } })
+		dispatch({ type: CartActionType.decrement, payload: { id, qty: 0 } })
 	}
 	const handleIncrement = (id: number) => {
-		dispatch({ type: CartActionType.increment, payload: { id } })
+		dispatch({ type: CartActionType.increment, payload: { id, qty: 0 } })
 	}
 
 	const { beers } = data ?? {}
 	const totalPrice =
 		beers &&
 		beers.reduce((acc, curr) => {
-			const qty = cart.find((item) => item.id === curr.id).qty
-			return acc + curr.price * qty
+			const qty = cart.find((item) => item.id === curr.id)?.qty
+			return acc + curr.price * (qty || 1)
 		}, 0)
 
 	return (
@@ -68,7 +67,7 @@ const Cart = () => {
 						beers &&
 						beers.map((beer) => {
 							const { id, name, price } = beer
-							const qty = cart.find((item) => item.id === id).qty
+							const qty = cart.find((item) => item.id === id)?.qty
 							return (
 								<CartItem key={id}>
 									<CartItemInfo>
@@ -156,7 +155,6 @@ const CartItemButtons = styled.div`
 
 const CartButton = styled.button`
 	${buttonStyles}
-	/* font-size: 0.75rem; */
 	padding: 0.5rem;
 	&:not(:last-of-type) {
 		border-bottom: 1px solid gray;

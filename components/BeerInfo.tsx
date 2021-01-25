@@ -1,14 +1,13 @@
 import React, { FC } from "react"
 import Link from "next/link"
 import styled from "@emotion/styled"
-import { css } from "@emotion/react"
-import { Beer } from "../mocks/handlers"
 import {
 	useCartDispatch,
 	useCartState,
 	CartActionType,
 } from "../context/CartContext"
-import { buttonReset } from "../styles/utils"
+import { buttonStyles } from "../styles/utils"
+import { Beer } from "../types"
 
 interface Props {
 	beer: Beer
@@ -22,7 +21,7 @@ const BeerInfo: FC<Props> = ({ beer, layout = "full" }) => {
 		dispatch({ type: CartActionType.addItem, payload: { id, qty: 1 } })
 	}
 	const handleDecrement = (id: number) => {
-		dispatch({ type: CartActionType.decrement, payload: { id } })
+		dispatch({ type: CartActionType.decrement, payload: { id, qty: 1 } })
 	}
 
 	const getCartItem = (id: number) => {
@@ -59,7 +58,7 @@ const BeerInfo: FC<Props> = ({ beer, layout = "full" }) => {
 						isInCart={isInCart}
 						onClick={() => handleAddToCart(id)}
 					>
-						{isInCart ? `${cartItem.qty} added` : "add to cart"}
+						{isInCart ? `${cartItem?.qty} added` : "add to cart"}
 					</CartAdd>
 				</CartButtons>
 			</ItemBody>
@@ -138,17 +137,6 @@ const CartButtons = styled.div`
 	grid-template-columns: min-content 1fr;
 	width: 100%;
 	max-width: 300px;
-`
-
-export const buttonStyles = css`
-	${buttonReset}
-	background-color: var(--button-bg);
-	&:hover {
-		background-color: var(--button-bg-hover);
-	}
-	&:focus {
-		background-color: var(--button-bg-hover);
-	}
 `
 
 const CartAdd = styled.button<{ isInCart: boolean }>`

@@ -4,7 +4,7 @@ import Head from "next/head"
 
 import BeerList from "../components/BeerList"
 import styled from "@emotion/styled"
-import { buttonStyles } from "../components/BeerInfo"
+import { buttonStyles } from "../styles/utils"
 
 const Home = () => {
 	const [searchTerm, setSearchTerm] = useState("")
@@ -28,7 +28,9 @@ const Home = () => {
 			>
 				<input
 					ref={(node) => {
-						input = node
+						if (node) {
+							input = node
+						}
 					}}
 					type='text'
 					name='search'
@@ -40,7 +42,9 @@ const Home = () => {
 					id='style'
 					defaultValue='all'
 					ref={(node) => {
-						select = node
+						if (node) {
+							select = node
+						}
 					}}
 				>
 					<option value='all'>All</option>

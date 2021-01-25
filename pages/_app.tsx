@@ -1,14 +1,15 @@
 import { ApolloProvider } from "@apollo/client"
-import styled from "@emotion/styled"
+import {AppProps} from 'next/app'
 import Link from "next/link"
-import Cart from "../components/Cart"
-import { CartProvider } from "../context/CartContext"
+import styled from "@emotion/styled"
 import { useApollo } from "../lib/apolloClient"
-import "../styles/globals.css"
+import { CartProvider } from "../context/CartContext"
+import Cart from "../components/Cart"
 import { content } from "../styles/utils"
+import "../styles/globals.css"
 require("../mocks")
 
-const App = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }: AppProps) => {
 	const apolloClient = useApollo(pageProps.initialApolloState)
 
 	return (

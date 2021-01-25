@@ -4,9 +4,9 @@ import Link from "next/link"
 import Head from "next/head"
 import { gql, useQuery } from "@apollo/client"
 
-import { Beer } from "../mocks/handlers"
 import styled from "@emotion/styled"
 import BeerInfo from "../components/BeerInfo"
+import { Beer } from "../types"
 
 export const GET_ONE_BEER = gql`
 	query GetOneBeer($id: Int!) {

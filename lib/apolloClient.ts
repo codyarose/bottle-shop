@@ -19,7 +19,7 @@ const createApolloClient = () => {
 	})
 }
 
-export const initializeApollo = (initialState = null) => {
+export const initializeApollo = (initialState = {}) => {
 	const _apolloClient = apolloClient ?? createApolloClient()
 
 	if (initialState) {
@@ -34,7 +34,7 @@ export const initializeApollo = (initialState = null) => {
 	return _apolloClient
 }
 
-export const useApollo = (initialState: unknown) => {
+export const useApollo = (initialState = {}) => {
 	const store = useMemo(() => initializeApollo(initialState), [initialState])
 	return store
 }

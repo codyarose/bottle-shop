@@ -31,3 +31,14 @@ export const buttonReset = css`
 		transform: none;
 	}
 `
+
+export const buttonStyles = css`
+	${buttonReset}
+	background-color: var(--button-bg);
+	&:hover {
+		background-color: var(--button-bg-hover);
+	}
+	&:focus {
+		background-color: var(--button-bg-hover);
+	}
+`

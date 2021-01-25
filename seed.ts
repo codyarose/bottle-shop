@@ -1,4 +1,4 @@
-import { Beer } from "./mocks/handlers"
+import { Beer } from "./types"
 
 export const beers: Beer[] = [
 	{

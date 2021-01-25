@@ -1,29 +1,11 @@
 import { graphql } from "msw"
 import { beers } from "../seed"
-
-export interface Brewery {
-	id: number
-	name: string
-	location: string
-}
-
-export type Styles = "IPA" | "Stout"
-
-export interface Beer {
-	id: number
-	name: string
-	image: string
-	description: string
-	style: Styles
-	abv: number
-	price: number
-	brewery: Brewery
-}
+import { Beer } from "../types"
 
 export const handlers = [
 	graphql.query("GetOneBeer", (req, res, ctx) => {
 		const { id } = req.variables
-		const beer = beers.filter((beer) => beer.id === id)[0]
+		const beer: Beer = beers.filter((beer) => beer.id === id)[0]
 		if (!beer) {
 			return res(
 				ctx.errors([

@@ -1,13 +1,16 @@
-import { createContext, Dispatch, useContext, useReducer } from "react"
+import { createContext, Dispatch, FC, useContext, useReducer } from "react"
 
 interface CartState {
-	cart: any[]
+	cart: {
+		id: number
+		qty: number
+	}[]
 }
 type CartDispatch = Dispatch<{
 	type: CartActionType
 	payload?: {
 		id: number
-		qty?: number
+		qty: number
 	}
 }>
 
@@ -23,18 +26,20 @@ const CartDispatchContext = createContext<CartDispatch | undefined>(undefined)
 
 const cartReducer = (
 	state: CartState,
-	action: { type: CartActionType; payload?: { id: number } }
-) => {
+	action: { type: CartActionType; payload?: { id: number; qty: number } }
+): CartState => {
 	switch (action.type) {
 		case CartActionType.hydrateCart: {
-			const storedCart = window.localStorage.getItem("cart")
+			const storedCart = window.localStorage.getItem("cart") || ""
 			return { cart: JSON.parse(storedCart) }
 		}
 		case CartActionType.addItem: {
-			if (state.cart.find((item) => item.id === action.payload.id)) {
+			if (state.cart.find((item) => item.id === action.payload?.id)) {
 				const newCart = state.cart.map((item) => {
-					if (item.id === action.payload.id) {
-						return Object.assign({}, item, { qty: item.qty + 1 })
+					if (item.id === action.payload?.id) {
+						return Object.assign({}, item, {
+							qty: item.qty + 1,
+						})
 					}
 					return item
 				})
@@ -42,13 +47,15 @@ const cartReducer = (
 				return { cart: newCart }
 			}
 
-			const newCart = [...state.cart, action.payload]
+			const newCart = action.payload
+				? [...state.cart, action.payload]
+				: [...state.cart]
 			window.localStorage.setItem("cart", JSON.stringify(newCart))
 			return { cart: newCart }
 		}
 		case CartActionType.increment: {
 			const newCart = state.cart.map((item) => {
-				if (item.id === action.payload.id) {
+				if (item.id === action.payload?.id) {
 					return Object.assign({}, item, { qty: item.qty + 1 })
 				}
 				return item
@@ -58,17 +65,17 @@ const cartReducer = (
 		}
 		case CartActionType.decrement: {
 			const item = state.cart.find(
-				(item) => item.id === action.payload.id
+				(item) => item.id === action.payload?.id
 			)
-			if (item.qty === 1) {
+			if (item?.qty === 1) {
 				const newCart = state.cart.filter(
-					(item) => item.id !== action.payload.id
+					(item) => item.id !== action.payload?.id
 				)
 				window.localStorage.setItem("cart", JSON.stringify(newCart))
 				return { cart: newCart }
 			}
 			const newCart = state.cart.map((item) => {
-				if (item.id === action.payload.id) {
+				if (item.id === action.payload?.id) {
 					return Object.assign({}, item, { qty: item.qty - 1 })
 				}
 				return item
@@ -78,18 +85,19 @@ const cartReducer = (
 		}
 		case CartActionType.removeItem: {
 			const newCart = state.cart.filter(
-				(item) => item.id !== action.payload.id
+				(item) => item.id !== action.payload?.id
 			)
 			window.localStorage.setItem("cart", JSON.stringify(newCart))
 			return { cart: newCart }
 		}
 		default:
-			break
+			return { cart: [] }
 	}
 }
 
-const CartProvider = ({ children }) => {
-	const [state, dispatch] = useReducer(cartReducer, { cart: [] })
+const CartProvider: FC = ({ children }) => {
+	const initialState: CartState = { cart: [] }
+	const [state, dispatch] = useReducer(cartReducer, initialState)
 	return (
 		<CartStateContext.Provider value={state}>
 			<CartDispatchContext.Provider value={dispatch}>
