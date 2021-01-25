@@ -4,20 +4,16 @@ import Link from "next/link"
 import Head from "next/head"
 import { gql, useQuery } from "@apollo/client"
 
-import styled from "@emotion/styled"
-import BeerInfo from "../components/BeerInfo"
-import { Beer } from "../types"
+import { Beer } from "../mocks/handlers"
 
 export const GET_ONE_BEER = gql`
 	query GetOneBeer($id: Int!) {
 		beer(id: $id) {
-			id
 			name
 			image
 			style
 			price
 			abv
-			description
 		}
 	}
 `
@@ -29,9 +25,10 @@ const Page = () => {
 	const { loading, data, error } = useQuery<{ beer: Beer }>(GET_ONE_BEER, {
 		variables: { id: Number(id) },
 	})
-	const { beer } = { ...data }
+	const { beer } = data ?? {}
+
 	return (
-		<Product>
+		<div>
 			<Head>
 				<title>{beer?.name} | Bottle Shop</title>
 				<link rel='icon' href='/favicon.ico' />
@@ -46,14 +43,14 @@ const Page = () => {
 				</div>
 			)}
 			{!loading && data && (
-				<BeerInfo key={beer.id} beer={beer} layout='full' />
+				<div>
+					<p>
+						post id: {id} {beer.name}
+					</p>
+				</div>
 			)}
-		</Product>
+		</div>
 	)
 }
-
-const Product = styled.main`
-	padding: 2rem 0;
-`
 
 export default Page

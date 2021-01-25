@@ -3,8 +3,6 @@ import { initializeApollo } from "../lib/apolloClient"
 import Head from "next/head"
 
 import BeerList from "../components/BeerList"
-import styled from "@emotion/styled"
-import { buttonStyles } from "../styles/utils"
 
 const Home = () => {
 	const [searchTerm, setSearchTerm] = useState("")
@@ -19,58 +17,40 @@ const Home = () => {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 
-			<Form
+			<form
 				onSubmit={(e) => {
 					e.preventDefault()
 					setSearchTerm(input.value)
 					setStyleFilter(select.value)
 				}}
 			>
+				<label htmlFor='search'>Search:</label>
 				<input
 					ref={(node) => {
-						if (node) {
-							input = node
-						}
+						input = node
 					}}
 					type='text'
 					name='search'
 					id='search'
-					placeholder='Search'
 				/>
 				<select
 					name='style'
 					id='style'
 					defaultValue='all'
 					ref={(node) => {
-						if (node) {
-							select = node
-						}
+						select = node
 					}}
 				>
 					<option value='all'>All</option>
 					<option value='IPA'>IPA</option>
 					<option value='Stout'>Stout</option>
 				</select>
-				<Submit>submit</Submit>
-			</Form>
+				<button type='submit'>submit</button>
+			</form>
 			<BeerList nameFilter={searchTerm} styleFilter={styleFilter} />
 		</>
 	)
 }
-
-const Form = styled.form`
-	display: grid;
-	grid-template-columns: repeat(3, min-content);
-	gap: 0.5rem;
-	margin-bottom: 1rem;
-	& > * {
-		padding: 0.5rem;
-	}
-`
-
-const Submit = styled.button`
-	${buttonStyles}
-`
 
 export async function getStaticProps() {
 	const apolloClient = initializeApollo()

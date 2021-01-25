@@ -1,15 +1,14 @@
 import { ApolloProvider } from "@apollo/client"
-import {AppProps} from 'next/app'
-import Link from "next/link"
 import styled from "@emotion/styled"
-import { useApollo } from "../lib/apolloClient"
-import { CartProvider } from "../context/CartContext"
+import Link from "next/link"
 import Cart from "../components/Cart"
-import { content } from "../styles/utils"
+import { CartProvider } from "../context/CartContext"
+import { useApollo } from "../lib/apolloClient"
 import "../styles/globals.css"
+import { content } from "../styles/utils"
 require("../mocks")
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps }) => {
 	const apolloClient = useApollo(pageProps.initialApolloState)
 
 	return (
@@ -29,10 +28,11 @@ const App = ({ Component, pageProps }: AppProps) => {
 						</Main>
 						<Footer>
 							<a
-								href='https://github.com/codyarose/bottle-shop'
+								href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
 								target='_blank'
+								rel='noopener noreferrer'
 							>
-								Github
+								Powered by Vercel
 							</a>
 						</Footer>
 					</AppBody>
@@ -71,11 +71,5 @@ const Header = styled.header`
 
 const Footer = styled.footer`
 	${content}
-	padding: 2rem;
-	text-align: center;
-	font-size: 1.5rem;
-	a {
-		text-decoration: underline;
-	}
 `
 export default App

@@ -18,10 +18,3 @@ a {
 * {
 	box-sizing: border-box;
 }
-
-:root {
-	--button-bg: #eaed07;
-	--button-bg-hover: #d6da07;
-	--background: #2f2f2f;
-	--text-color: #fff;
-}
