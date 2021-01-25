@@ -81,25 +81,25 @@ export const beers: Beer[] = [
 	},
 ]
 
-export const breweries = [
-	{
-		id: 1,
-		name: "Russian River Brewing Company",
-		location: "California, USA",
-	},
-	{
-		id: 2,
-		name: "Prairie Artisan Ales",
-		location: "Oklahoma, USA",
-	},
-	{
-		id: 3,
-		name: "Trimtab Brewing Company",
-		location: "Alabama, USA",
-	},
-	{
-		id: 4,
-		name: "Tree House Brewing Company",
-		location: "Massachusetts, USA",
-	},
-]
+// export const breweries = [
+// 	{
+// 		id: 1,
+// 		name: "Russian River Brewing Company",
+// 		location: "California, USA",
+// 	},
+// 	{
+// 		id: 2,
+// 		name: "Prairie Artisan Ales",
+// 		location: "Oklahoma, USA",
+// 	},
+// 	{
+// 		id: 3,
+// 		name: "Trimtab Brewing Company",
+// 		location: "Alabama, USA",
+// 	},
+// 	{
+// 		id: 4,
+// 		name: "Tree House Brewing Company",
+// 		location: "Massachusetts, USA",
+// 	},
+// ]
