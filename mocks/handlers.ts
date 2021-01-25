@@ -60,7 +60,6 @@ export const handlers = [
 		return res(
 			ctx.data({
 				beers: beerList,
-				count: beerList.length,
 			})
 		)
 	}),

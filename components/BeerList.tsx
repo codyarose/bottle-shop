@@ -11,7 +11,6 @@ interface Props {
 
 export const GET_BEERS = gql`
 	query GetBeers($nameFilter: String!, $styleFilter: String!) {
-		count
 		beers(nameFilter: $nameFilter, styleFilter: $styleFilter) {
 			id
 			name
@@ -24,21 +23,17 @@ export const GET_BEERS = gql`
 `
 
 const BeerList: FC<Props> = ({ nameFilter, styleFilter }) => {
-	const { loading, error, data } = useQuery<{ beers: Beer[]; count: number }>(
-		GET_BEERS,
-		{
-			variables: { nameFilter, styleFilter },
-		}
-	)
-	const { count, beers } = data ?? {}
+	const { loading, error, data } = useQuery<{ beers: Beer[] }>(GET_BEERS, {
+		variables: { nameFilter, styleFilter },
+	})
+	const { beers } = data ?? {}
 
 	return (
-		<div>
+		<div style={{ marginTop: "3rem" }}>
 			{loading && <span>loading...</span>}
 			{error && <span>Error: {error.message}</span>}
 			{!loading && data && (
 				<>
-					<span>{count} results</span>
 					<List>
 						{beers.map((beer: Beer) => (
 							<li key={beer.id}>
