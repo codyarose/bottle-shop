@@ -28,11 +28,10 @@ const App = ({ Component, pageProps }) => {
 						</Main>
 						<Footer>
 							<a
-								href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
+								href='https://github.com/codyarose/bottle-shop'
 								target='_blank'
-								rel='noopener noreferrer'
 							>
-								Powered by Vercel
+								Github
 							</a>
 						</Footer>
 					</AppBody>
@@ -71,5 +70,11 @@ const Header = styled.header`
 
 const Footer = styled.footer`
 	${content}
+	padding: 2rem;
+	text-align: center;
+	font-size: 1.5rem;
+	a {
+		text-decoration: underline;
+	}
 `
 export default App
