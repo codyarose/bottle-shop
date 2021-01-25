@@ -63,45 +63,4 @@ export const handlers = [
 			})
 		)
 	}),
-	graphql.mutation("Login", (req, res, ctx) => {
-		const { username } = req.variables
-		if (typeof window !== "undefined") {
-			window.sessionStorage.setItem("is-authenticated", username)
-		}
-
-		return res(
-			ctx.data({
-				login: {
-					username,
-				},
-			})
-		)
-	}),
-	graphql.query("GetUserInfo", (_req, res, ctx) => {
-		let authenticatedUser: string
-		if (typeof window !== "undefined") {
-			authenticatedUser = window.sessionStorage.getItem(
-				"is-authenticated"
-			)
-		}
-
-		if (!authenticatedUser) {
-			return res(
-				ctx.errors([
-					{
-						message: "Not authenticated",
-						errorType: "AuthenticationError",
-					},
-				])
-			)
-		}
-
-		return res(
-			ctx.data({
-				user: {
-					username: authenticatedUser,
-				},
-			})
-		)
-	}),
 ]
