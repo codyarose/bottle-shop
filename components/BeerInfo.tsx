@@ -35,7 +35,11 @@ const BeerInfo: FC<Props> = ({ beer, layout = "full" }) => {
 
 	return (
 		<Item layout={layout} key={id}>
-			<ItemImage src={image} alt={`${name} label`} />
+			<Link href={`/${id}`}>
+				<a>
+					<ItemImage src={image} alt={`${name} label`} />
+				</a>
+			</Link>
 			<ItemBody layout={layout}>
 				<ItemTitle>
 					<Link href={`/${id}`}>
