@@ -39,6 +39,16 @@ export const handlers = [
 			})
 		)
 	}),
+	graphql.query("GetBeersByIds", (req, res, ctx) => {
+		const { ids } = req.variables
+		const beerList = beers.filter((item) => ids.indexOf(item.id) !== -1)
+
+		return res(
+			ctx.data({
+				beers: beerList,
+			})
+		)
+	}),
 	graphql.query("GetBeers", (req, res, ctx) => {
 		const { nameFilter, styleFilter } = req.variables
 		const beerList = beers.filter(
@@ -46,6 +56,7 @@ export const handlers = [
 				beer.name.toLowerCase().includes(nameFilter) &&
 				(styleFilter === "all" || beer.style === styleFilter)
 		)
+
 		return res(
 			ctx.data({
 				beers: beerList,
