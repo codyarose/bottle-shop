@@ -7,6 +7,7 @@ type CartDispatch = Dispatch<{
 	type: CartActionType
 	payload?: {
 		id: number
+		qty?: number
 	}
 }>
 
@@ -14,6 +15,8 @@ export enum CartActionType {
 	addItem,
 	removeItem,
 	hydrateCart,
+	increment,
+	decrement,
 }
 const CartStateContext = createContext<CartState | undefined>(undefined)
 const CartDispatchContext = createContext<CartDispatch | undefined>(undefined)
@@ -29,10 +32,47 @@ const cartReducer = (
 		}
 		case CartActionType.addItem: {
 			if (state.cart.find((item) => item.id === action.payload.id)) {
-				return { cart: state.cart }
+				const newCart = state.cart.map((item) => {
+					if (item.id === action.payload.id) {
+						return Object.assign({}, item, { qty: item.qty + 1 })
+					}
+					return item
+				})
+				window.localStorage.setItem("cart", JSON.stringify(newCart))
+				return { cart: newCart }
 			}
 
 			const newCart = [...state.cart, action.payload]
+			window.localStorage.setItem("cart", JSON.stringify(newCart))
+			return { cart: newCart }
+		}
+		case CartActionType.increment: {
+			const newCart = state.cart.map((item) => {
+				if (item.id === action.payload.id) {
+					return Object.assign({}, item, { qty: item.qty + 1 })
+				}
+				return item
+			})
+			window.localStorage.setItem("cart", JSON.stringify(newCart))
+			return { cart: newCart }
+		}
+		case CartActionType.decrement: {
+			const item = state.cart.find(
+				(item) => item.id === action.payload.id
+			)
+			if (item.qty === 1) {
+				const newCart = state.cart.filter(
+					(item) => item.id !== action.payload.id
+				)
+				window.localStorage.setItem("cart", JSON.stringify(newCart))
+				return { cart: newCart }
+			}
+			const newCart = state.cart.map((item) => {
+				if (item.id === action.payload.id) {
+					return Object.assign({}, item, { qty: item.qty - 1 })
+				}
+				return item
+			})
 			window.localStorage.setItem("cart", JSON.stringify(newCart))
 			return { cart: newCart }
 		}
