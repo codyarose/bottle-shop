@@ -25,8 +25,8 @@ const Cart = () => {
 	const dispatch = useCartDispatch()
 	const { cart } = useCartState()
 
-	const cartIds = cart.reduce((item, currentValue) => {
-		return [...item, currentValue.id]
+	const cartIds = cart.reduce((acc, curr) => {
+		return [...acc, curr.id]
 	}, [])
 
 	const { loading, error, data } = useQuery<{ beers: Beer[] }>(
@@ -51,6 +51,12 @@ const Cart = () => {
 	}
 
 	const { beers } = data ?? {}
+	const totalPrice =
+		beers &&
+		beers.reduce((acc, curr) => {
+			const qty = cart.find((item) => item.id === curr.id).qty
+			return acc + curr.price * qty
+		}, 0)
 
 	return (
 		<CartDrawer>
@@ -80,24 +86,29 @@ const Cart = () => {
 										<CartButton
 											onClick={() => handleDecrement(id)}
 										>
-											➖
+											-
 										</CartButton>
 										<span>{qty}</span>
 										<CartButton
 											onClick={() => handleIncrement(id)}
 										>
-											➕
+											+
 										</CartButton>
 										<RemoveButton
 											onClick={() => handleRemove(id)}
 										>
-											<small>Delete</small>
+											<small>delete</small>
 										</RemoveButton>
 									</CartItemButtons>
 								</CartItem>
 							)
 						})}
 				</CartList>
+				{totalPrice ? (
+					<CartTotal>
+						<h4>Total: ${totalPrice}</h4>
+					</CartTotal>
+				) : null}
 			</CartContent>
 		</CartDrawer>
 	)
@@ -137,7 +148,7 @@ const CartItemInfo = styled.div`
 
 const CartItemButtons = styled.div`
 	display: grid;
-	grid-template-columns: min-content 20px min-content min-content;
+	grid-template-columns: 2rem 20px 2rem min-content;
 	gap: 0.5rem;
 	text-align: center;
 	align-items: center;
@@ -145,8 +156,8 @@ const CartItemButtons = styled.div`
 
 const CartButton = styled.button`
 	${buttonStyles}
-	font-size: 0.75rem;
-	padding: 0.5rem 0.75rem;
+	/* font-size: 0.75rem; */
+	padding: 0.5rem;
 	&:not(:last-of-type) {
 		border-bottom: 1px solid gray;
 	}
@@ -154,6 +165,10 @@ const CartButton = styled.button`
 
 const RemoveButton = styled.button`
 	all: unset;
+`
+
+const CartTotal = styled.div`
+	margin-top: 3rem;
 `
 
 export default Cart
