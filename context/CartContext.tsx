@@ -49,6 +49,9 @@ const cartReducer = (
 ): CartState => {
 	switch (action.type) {
 		case CartActionType.hydrateCart: {
+			if (window.localStorage.getItem("cart") === null) {
+				window.localStorage.setItem("cart", JSON.stringify([]))
+			}
 			const storedCart = window.localStorage.getItem("cart") || ""
 			return { cart: JSON.parse(storedCart) }
 		}
